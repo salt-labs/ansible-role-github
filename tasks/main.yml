@@ -1,0 +1,87 @@
+---
+##################################################
+# Tasks
+##################################################
+
+- name: "Sanity Check"
+  assert:
+    that:
+      - github_config is defined
+      - github_config != ""
+    fail_msg:
+      - "FAIL: github_config has not been provided"
+      - "Please define github_config and run the role again"
+    success_msg:
+      - "SUCCESS: github_config has been provided"
+
+- name: "Install Dependencies: Python packages"
+  pip:
+    name:
+      - PyGithub>=1.55
+      - github3.py>=2.0.0
+
+- name: Configure GitHub Access Keys
+  include_tasks: tasks/items/access_key.yml
+  loop: "{{ github_config.access_keys }}"
+  loop_control:
+    loop_var: access_key
+  when:
+    - github_config.access_keys is defined
+  tags:
+    - github
+    - github_access_keys
+
+- name: Configure GitHub Repositories
+  include_tasks: tasks/items/repository.yml
+  loop: "{{ github_config.repositories }}"
+  loop_control:
+    loop_var: repository
+  when:
+    - github_config.repositories is defined
+  tags:
+    - github
+    - github_repositories
+
+- name: Configure GitHub Deploy Keys
+  include_tasks: tasks/items/deploy_key.yml
+  loop: "{{ github_config.deploy_keys }}"
+  loop_control:
+    loop_var: deploy_key
+  when:
+    - github_config.deploy_keys is defined
+  tags:
+    - github
+    - github_deploy_keys
+
+- name: Configure GitHub Issues
+  include_tasks: tasks/items/issue.yml
+  loop: "{{ github_config.issues }}"
+  loop_control:
+    loop_var: issue
+  when:
+    - github_config.issues is defined
+  tags:
+    - github
+    - github_issues
+
+- name: Configure GitHub Releases
+  include_tasks: tasks/items/release.yml
+  loop: "{{ github_config.releases }}"
+  loop_control:
+    loop_var: release
+  when:
+    - github_config.releases is defined
+  tags:
+    - github
+    - github_releases
+
+- name: Configure GitHub Webhooks
+  include_tasks: tasks/items/webhook.yml
+  loop: "{{ github_config.webhooks }}"
+  loop_control:
+    loop_var: webhook
+  when:
+    - github_config.webhooks is defined
+  tags:
+    - github
+    - github_webhooks

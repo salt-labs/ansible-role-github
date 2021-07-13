@@ -1,0 +1,56 @@
+# gitignore
+
+## macOS
+
+### General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Icon must end with two \r
+Icon
+
+### Thumbnails
+._*
+
+### Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+### Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+*.pyc
+*.retry
+*.swp
+
+# IntelliJ
+.idea/
+*.iml
+
+# Ansible
+ansible-*.cfg
+
+galaxy/
+**/galaxy
+**/files/openshift-install
+**/bin
+
+**/ansible/roles/
+**/ansible/roles/**
+!**/ansible/roles/requirements.yml
+
+**/ansible/collections/
+**/ansible/collections/**
+!**/ansible/collections/requirements.yml
+
+TODO/

@@ -1,0 +1,70 @@
+---
+
+#########################
+# Webhook
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_webhook_module.html#ansible-collections-community-general-github-webhook-module
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_webhook_info_module.html#ansible-collections-community-general-github-webhook-info-module
+# https://developer.github.com/v3/activity/events/types/
+
+- name: List Valid Actions
+  set_fact:
+    valid_actions:
+      - create
+      - delete
+      - info
+
+- name: Check Valid Actions
+  fail:
+    msg:
+      - "Unsupported action type: {{ webhook.action }}"
+      - "Supported action types: {{ valid_actions }}"
+  when:
+    - webhook.action is undefined
+      or
+      webhook.action not in valid_actions
+
+- name: Check Variables
+  fail:
+    msg: "Please provide organization and repository variables for webhook"
+  when:
+    - webhook.organization is undefined
+      or
+      webhook.repository is undefined
+
+- name: Create GitHub Webhook
+  community.general.github_webhook:
+    active: "{{ webhook.active | default('True') }}"
+    content_type: "{{ webhook.content_type | default('form') }}"
+    events: "{{ webhook.events | mandatory }}"
+    github_url: "{{ github_config.api.url | default('https://api.github.com') }}"
+    insecure_ssl: "{{ webhook.insecure_ssl | default('False') }}"
+    repository: "{{ ( webhook.organization + '/' + webhook.repository ) | mandatory }}"
+    secret: "{{ webhook.secret if webhook.secret is defined else omit }}"
+    state: present
+    token: "{{ github_config.api.token | mandatory }}"
+    url: "{{ webhook.url | mandatory }}"
+    user: "{{ webhook.user | mandatory }}"
+  when:
+    - webhook.action == "create"
+
+- name: Delete GitHub Webhook
+  community.general.github_webhook:
+    github_url: "{{ github_config.api.url | default('https://api.github.com') }}"
+    repository: "{{ ( webhook.organization + '/' + webhook.repository ) | mandatory }}"
+    state: absent
+    token: "{{ github_config.api.token | mandatory }}"
+    url: "{{ webhook.url | mandatory }}"
+    user: "{{ webhook.user | mandatory }}"
+  when:
+    - webhook.action == "delete"
+
+- name: "Query GitHub Webhooks from repository{{ webhook.repository }}"
+  community.general.github_webhook_info:
+    github_url: "{{ github_config.api.url | default('https://api.github.com') }}"
+    repository: "{{ ( webhook.organization + '/' + webhook.repository ) | mandatory }}"
+    token: "{{ github_config.api.token | mandatory }}"
+    user: "{{ webhook.user | mandatory }}"
+  when:
+    - webhook.action == "info"

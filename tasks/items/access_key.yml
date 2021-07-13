@@ -1,0 +1,15 @@
+---
+
+#########################
+# Access Key
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_key_module.html#ansible-collections-community-general-github-key-module
+
+- name: "Configure GitHub Access Key {{ access_key.name }}"
+  community.general.github_key:
+    force: "{{ access_key.force | default('True') }}"
+    name: "{{ access_key.name | mandatory }}"
+    pubkey: "{{ access_key.key | mandatory }}"
+    state: "{{ access_key.state | default('present') }}"
+    token: "{{ github_config.api.token | mandatory }}"

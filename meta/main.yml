@@ -1,0 +1,34 @@
+---
+galaxy_info:
+  role_name: github
+
+  author: MAHDTech
+  description: Ansible role that bundles the GitHub modules from the community.general collection
+  company: Salt Labs
+
+  issue_tracker_url: "https://github.com/saltlabs/ansible-role-github/issues"
+
+  license: Apache-2.0
+
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: Fedora
+      versions:
+        - "30"
+        - "31"
+        - "32"
+
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+
+  galaxy_tags:
+    - git
+    - github
+    - deploy_key
+    - issue
+    - repository
+
+dependencies: []

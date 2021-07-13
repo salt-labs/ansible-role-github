@@ -1,0 +1,11 @@
+---
+
+##################################################
+# Defaults
+##################################################
+
+# NOTE: Store these in Ansible vault.
+
+vault_github:
+
+  pat: "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"

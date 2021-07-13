@@ -1,0 +1,47 @@
+---
+
+#########################
+# Release
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_release_module.html#ansible-collections-community-general-github-release-module
+
+- name: List Valid Actions
+  set_fact:
+    valid_actions:
+      - latest_release
+      - create_release
+
+- name: Check Valid Actions
+  fail:
+    msg:
+      - "Unsupported action type: {{ release.action }}"
+      - "Supported action types: {{ valid_actions }}"
+  when:
+    - release.action is undefined
+      or
+      release.action not in valid_actions
+
+- name: Latest GitHub Release
+  community.general.github_release:
+    action: latest_release
+    repo: "{{ release.repository | mandatory }}"
+    token: "{{ github_config.api.token | mandatory }}"
+    user: "{{ release.organization | mandatory }}"
+  when:
+    - release.action == "latest_release"
+
+- name: Create GitHub Release
+  community.general.github_release:
+    action: create_release
+    body: "{{ release.body if release.body is defined else omit }}"
+    draft: "{{ release.draft | default('False') }}"
+    name: "{{ release.name if release.name is defined else omit }}"
+    prerelease: "{{ release.prerelease | default('False') }}"
+    repo: "{{ release.repository | mandatory }}"
+    token: "{{ github_config.api.token | mandatory }}"
+    user: "{{ release.organization | mandatory }}"
+    tag: "{{ release.tag | mandatory }}"
+    target: "{{ release.target if release.target is defined else omit }}"
+  when:
+    - release.action == "create_release"

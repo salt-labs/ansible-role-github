@@ -1,0 +1,16 @@
+---
+
+#########################
+# Repository
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_repo_module.html#ansible-collections-community-general-github-repo-module
+
+- name: "Configure GitHub Repository {{ repository.name }}"
+  community.general.github_repo:
+    access_token: "{{ github_config.api.token | mandatory }}"
+    name: "{{ repository.name | mandatory }}"
+    description: "{{ repository.description if repository.description is defined else omit }}"
+    organization: "{{ repository.organization if repository.organization is defined else omit }}"
+    private: "{{ repository.private | default('False') }}"
+    state: "{{ repository.state | default('present') }}"

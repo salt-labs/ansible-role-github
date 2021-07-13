@@ -1,0 +1,19 @@
+---
+
+#########################
+# Deploy Key
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_deploy_key_module.html#ansible-collections-community-general-github-deploy-key-module
+
+- name: "Configure Deploy Key {{ deploy_key.name }}"
+  community.general.github_deploy_key:
+    force: "{{ deploy_key.force | default('False') }}"
+    github_url: "{{ github_config.api.url | default('https://api.github.com') }}"
+    key: "{{ deploy_key.key | mandatory }}"
+    name: "{{ deploy_key.name | mandatory }}"
+    owner: "{{ deploy_key.owner | mandatory }}"
+    read_only: "{{ deploy_key.read_only | default('True') }}"
+    repo: "{{ deploy_key.repository | mandatory }}"
+    state: "{{ deploy_key.state | default('present') }}"
+    token: "{{ github_config.api.token | mandatory }}"

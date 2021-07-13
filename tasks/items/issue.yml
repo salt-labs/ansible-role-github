@@ -1,0 +1,29 @@
+---
+
+#########################
+# Issue
+#########################
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/github_issue_module.html#ansible-collections-community-general-github-issue-module
+
+- name: List Valid Actions
+  set_fact:
+    valid_actions:
+      - get_status
+
+- name: Check Valid Actions
+  fail:
+    msg:
+      - "Unsupported action type: {{ issue.action }}"
+      - "Supported action types: {{ valid_actions }}"
+  when:
+    - issue.action is undefined
+      or
+      issue.action not in valid_actions
+
+- name: "Configure GitHub Issue {{ issue.num }}"
+  community.general.github_issue:
+    action: "{{ issue.action | default('get_status') }}"
+    issue: "{{ issue.num | mandatory }}"
+    organization: "{{ issue.organization | mandatory }}"
+    repo: "{{ issue.repository | mandatory }}"

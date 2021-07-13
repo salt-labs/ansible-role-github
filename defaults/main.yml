@@ -1,0 +1,95 @@
+---
+
+##################################################
+# Defaults
+##################################################
+
+github_config:
+
+  api:
+    url: "https://api.github.com"
+    token: "{{ vault_github.pat | mandatory }}"
+
+  access_keys: []
+
+    #- name: Example
+    #  key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    #  state: present
+    #  force: False
+
+  deploy_keys: []
+
+    #- name: Example
+    #  key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    #  owner: MAHDTech
+    #  repository: ansible-role-github
+    #  read_only: True
+    #  state: present
+    #  force: False
+
+  issues: []
+
+    # NOTE: Only works on Public repositories
+    #- num: 1
+    #  action: get_status
+    #  organization: ansible
+    #  repository: ansible
+
+  releases: []
+
+    # List the latest release for User or Organization
+    #- action: latest_release
+    #  repository: ansible
+    #  organization: ansible
+
+    # Create a new release
+    #- action: fail_release
+    #  name: "Release Name"
+    #  body: "This release was created by Ansible"
+    #  draft: True
+    #  prerelease: True
+    #  repository: ansible
+    #  organization: ansible
+    #  tag: v1.0.0
+    #  target: main
+
+  repos: []
+
+    #- name: example user repository
+    #  description: My example GitHub repository
+    #  private: True
+    #  state: present
+
+    #- name: example organization repository
+    #  description: My example GitHub repository
+    #  organization: organization
+    #  private: True
+    #  state: present
+
+  webhooks: []
+
+    # List webhooks on repository
+    #- action: info
+    #  organization: ansible
+    #  repository: ansible
+    #  user: octocat
+
+    # Create a webhook in a repository
+    #- action: create
+    #  organization: ansible
+    #  repository: ansible
+    #  user: octocat
+    #  active: True
+    #  content_type: form|json
+    # Available GitHub events: https://developer.github.com/v3/activity/events/types/
+    #  events:
+    #    - push
+    #  insecure_ssl: False
+    #  url: https://payload-url
+
+    # Delete a webhook from a repository
+    #- action: delete
+    #  organization: ansible
+    #  repository: ansible
+    #  user: octocat
+    #  url: https://payload-url
